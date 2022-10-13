@@ -50,20 +50,18 @@ const App: React.FC = () => {
 
   const [running, setRunning] = useState(false);
   const [programStateAvailable, setProgramStateAvailable] = useState(false);
-  const [programState, setProgramState] = useState({
-    wasmProgram: null
-  });
+  const [programState, setProgramState] = useState<WasmProgram>();
 
   useEffect(() => {
     const initProgramState = async () => {
         await init();
         let programState = new WasmProgram(convert2dGridTo1d(generateEmptyGrid()));
+        setProgramState(programState);
         setProgramStateAvailable(true)
     };
 
-    // call the async function.
     initProgramState();
-  }, [programState, programStateAvailable]);
+  }, [programStateAvailable, setProgramStateAvailable]);
 
   const runningRef = useRef(running);
   runningRef.current = running;
@@ -72,8 +70,7 @@ const App: React.FC = () => {
     if (!runningRef.current) {
       return;
     }
-    // @ts-ignore: Object is possibly 'null'.
-    let next_step = programState.wasmProgram.next_step()
+    let next_step = programState.next_step()
     setGrid({
       grid: convert1dGridTo2d(next_step, numRows, numCols)
     });
@@ -82,7 +79,10 @@ const App: React.FC = () => {
 
   return (
     <>
-      <button
+      { !programState && <p> Loading...</p> }
+      { programState &&
+        (<>
+        <button
         onClick={() => {
           setRunning(!running);
           if (!running) {
@@ -97,8 +97,7 @@ const App: React.FC = () => {
         onClick={() => {
           let input = generateRandomGrid();
           setGrid({grid: input})
-          // @ts-ignore: Object is possibly 'null'.
-          programState.wasmProgram.set_input(convert2dGridTo1d(input))
+          programState.set_input(convert2dGridTo1d(input))
         }}
       >
         random
@@ -107,8 +106,7 @@ const App: React.FC = () => {
         onClick={() => {
           let input = generateEmptyGrid();
           setGrid({grid: input})
-          // @ts-ignore: Object is possibly 'null'.
-          programState.wasmProgram.set_input(convert2dGridTo1d(input))
+          programState.set_input(convert2dGridTo1d(input))
         }}
       >
         clear
@@ -119,7 +117,7 @@ const App: React.FC = () => {
           gridTemplateColumns: `repeat(${numCols}, 100px)`
         }}
       >
-      </div>
+      </div></>)}
     </>
   );
 };
