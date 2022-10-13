@@ -67,14 +67,15 @@ const App: React.FC = () => {
   runningRef.current = running;
 
   const runSimulation = useCallback(() => {
-    if (!runningRef.current) {
-      return;
-    }
-    let next_step = programState.next_step()
-    setGrid({
-      grid: convert1dGridTo2d(next_step, numRows, numCols)
-    });
-    setTimeout(runSimulation, 10000);
+    if (programState) {
+      if (!runningRef.current) {
+        return;
+      }
+      let next_step = programState.next_step()
+      setGrid({
+        grid: convert1dGridTo2d(next_step, numRows, numCols)
+      });
+    } setTimeout(runSimulation, 10000);
   }, []);
 
   return (
