@@ -1,12 +1,4 @@
-# Miden Assembly Playground
-
-Playground for Stark-based VM [Miden's](https://github.com/maticnetwork/miden) assembly language
-
-[Try it out on Github Pages!](https://tohrnii.github.io/miden-game-of-life)
-
-## Prerequisites
-
-Install [wasm-pack](https://rustwasm.github.io/wasm-pack/installer/)
+# Miden GOL
 
 ## Starting site
 
